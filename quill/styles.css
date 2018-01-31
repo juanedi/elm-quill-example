@@ -1,0 +1,31 @@
+#nri-editor {
+  display: flex;
+}
+
+.editor {
+  flex: 1;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  font-family: Times New Roman;
+  font-size: 20px;
+}
+
+.editor-toolbar {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+}
+
+.editor-toolbar button {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 10px;
+  background: #F5F5F5;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.editor-toolbar button.ql-active {
+  color: #2C6BF6;
+}
