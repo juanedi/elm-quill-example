@@ -61,6 +61,12 @@ class NriEditor extends HTMLElement {
     let quillNode = this.getElementsByClassName("editor")[0]
 
     this._quill = new Quill(quillNode, {
+      // whitelist available formats to prevent arbitrary content from being pasted
+      formats: [
+        'bold',
+        'italic',
+        'foo'
+      ],
       modules: {
         toolbar: {
           container: ".editor-toolbar",
