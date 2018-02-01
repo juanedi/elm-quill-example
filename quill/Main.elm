@@ -1,19 +1,19 @@
 module Main exposing (..)
 
+import Editor
 import Html exposing (..)
 import Html.Attributes exposing (style)
 import Json.Encode as Encode
-import NriEditor
 import Regex
 
 
 type alias Model =
-    { editor : NriEditor.State
+    { editor : Editor.State
     }
 
 
 type Msg
-    = EditorUpdate NriEditor.State
+    = EditorUpdate Editor.State
 
 
 main : Program Encode.Value Model Msg
@@ -28,7 +28,7 @@ main =
 
 init : Encode.Value -> ( Model, Cmd Msg )
 init document =
-    ( { editor = NriEditor.initWithContent document }
+    ( { editor = Editor.initWithContent document }
     , Cmd.none
     )
 
@@ -44,10 +44,10 @@ view : Model -> Html Msg
 view model =
     div
         []
-        [ h1 [] [ text "Quill" ]
+        [ h1 [] [ text "Elm + Quill + CustomElement" ]
         , div [ style [ ( "display", "flex" ), ( "width", "100%" ) ] ]
             [ div [ style [ ( "flex", "2" ) ] ]
-                [ NriEditor.view [ NriEditor.onChange EditorUpdate ]
+                [ Editor.view [ Editor.onChange EditorUpdate ]
                     model.editor
                 ]
             , div [ style [ ( "flex", "1" ) ] ]
@@ -57,16 +57,16 @@ view model =
         ]
 
 
-viewDocumentInspector : NriEditor.State -> Html msg
+viewDocumentInspector : Editor.State -> Html msg
 viewDocumentInspector editor =
     div
         []
         [ div []
-            [ h2 [] [ text <| "word count: " ++ (toString <| wordCount (NriEditor.rawText editor)) ]
+            [ h2 [] [ text <| "word count: " ++ (toString <| wordCount (Editor.rawText editor)) ]
             ]
         , div []
             [ h2 [] [ text "document" ]
-            , pre [] [ text <| Encode.encode 2 (NriEditor.document editor) ]
+            , pre [] [ text <| Encode.encode 2 (Editor.document editor) ]
             ]
         ]
 

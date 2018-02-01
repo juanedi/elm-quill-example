@@ -1,12 +1,13 @@
 let Inline = Quill.import('blots/inline');
 
+// this is just to show how one could define a custom format
+// formats are not restricted to html tags. we draw whatever we want in the DOM here.
 class FooBlot extends Inline { }
 FooBlot.blotName = 'foo';
 FooBlot.tagName = 'strong';
-
 Quill.register(FooBlot);
 
-class NriEditor extends HTMLElement {
+class QuillEditor extends HTMLElement {
   constructor() {
     super();
     // TODO: clean this up.
@@ -110,4 +111,4 @@ class NriEditor extends HTMLElement {
   }
 }
 
-window.customElements.define('nri-editor', NriEditor)
+window.customElements.define('quill-editor', QuillEditor)

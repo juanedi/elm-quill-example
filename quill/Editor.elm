@@ -1,4 +1,4 @@
-module NriEditor
+module Editor
     exposing
         ( Document
         , State
@@ -97,6 +97,6 @@ unattr (Attr attr) =
 
 view : List (Attribute msg) -> State -> Html msg
 view attributes (State state) =
-    node "nri-editor"
+    node "quill-editor"
         (property "value" state.document :: List.map unattr attributes)
         []

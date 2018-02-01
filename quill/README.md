@@ -1,5 +1,8 @@
 # Elm + Quill with custom element example
 
+Beware! This is just a proof of concept.
+The API is weird and the component is not yet suitable for reuse.
+
 ## How to use
 
 ```
