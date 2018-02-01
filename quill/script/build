@@ -1,0 +1,3 @@
+#! /bin/bash
+
+elm-make --output _build/main.js --debug Main.elm

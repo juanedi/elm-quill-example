@@ -1,0 +1,3 @@
+#! /bin/bash
+
+find . | grep elm$ | entr elm-make --output _build/main.js --debug Main.elm
