@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (..)
+import NriEditor
 
 
 type alias Model =
@@ -31,5 +32,5 @@ view model =
     div
         []
         [ h1 [] [ text "Quill" ]
-        , div [] []
+        , NriEditor.view
         ]
