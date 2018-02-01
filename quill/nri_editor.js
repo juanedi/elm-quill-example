@@ -9,10 +9,15 @@ Quill.register(FooBlot);
 class NriEditor extends HTMLElement {
   constructor() {
     super();
+    // TODO: clean this up.
+    // the value is initialized before connectedCallback is called, so we need to store it before quill is initialized
+    this._value = null;
+    this._quill = null;
   }
 
   connectedCallback() {
     // TODO: figure out if we should use HTML imports
+    // TODO: render toolbar controls based on attributes
     this.innerHTML = `
       <style>
         .nri-editor {
@@ -84,13 +89,24 @@ class NriEditor extends HTMLElement {
     }
 
     this._quill.on('text-change', runDispatch);
+    this._quill.setContents(this._value);
   }
 
   get value() {
-    return {
-      text: this._quill.getText(),
-      document: this._quill.getContents()
-    };
+    if (this._quill) {
+      return {
+        text: this._quill.getText(),
+        document: this._quill.getContents()
+      };
+    }
+  }
+
+  set value(value) {
+    this._value = value;
+  }
+
+  get quill() {
+    return this._quill;
   }
 }
 

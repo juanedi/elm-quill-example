@@ -16,9 +16,9 @@ type Msg
     = EditorUpdate NriEditor.State
 
 
-main : Program Never Model Msg
+main : Program Encode.Value Model Msg
 main =
-    Html.program
+    Html.programWithFlags
         { init = init
         , subscriptions = always Sub.none
         , view = view
@@ -26,9 +26,11 @@ main =
         }
 
 
-init : ( Model, Cmd Msg )
-init =
-    ( { editor = NriEditor.init }, Cmd.none )
+init : Encode.Value -> ( Model, Cmd Msg )
+init document =
+    ( { editor = NriEditor.initWithContent document }
+    , Cmd.none
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -45,8 +47,8 @@ view model =
         [ h1 [] [ text "Quill" ]
         , div [ style [ ( "display", "flex" ), ( "width", "100%" ) ] ]
             [ div [ style [ ( "flex", "2" ) ] ]
-                [ NriEditor.view
-                    [ NriEditor.onChange EditorUpdate ]
+                [ NriEditor.view [ NriEditor.onChange EditorUpdate ]
+                    model.editor
                 ]
             , div [ style [ ( "flex", "1" ) ] ]
                 [ viewDocumentInspector model.editor

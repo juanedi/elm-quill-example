@@ -7,13 +7,38 @@
     <script src="nri_editor.js"></script>
   </head>
   <body>
-    <!-- TODO: move that web component into elm land! -->
     <div id="elm-host"></div>
 
     <script src="_build/main.js"></script>
     <script>
-      var node = document.getElementById('elm-host');
-      var app = Elm.Main.embed(node);
+     var doc = {
+       "ops": [
+         {
+           "insert": "hello\n\n"
+         },
+         {
+           "attributes": {
+             "foo": true
+           },
+           "insert": "world"
+         },
+         {
+           "insert": "\n\n"
+         },
+         {
+           "attributes": {
+             "italic": true
+           },
+           "insert": "lala"
+         },
+         {
+           "insert": "\n"
+         }
+       ]
+     }
+
+     var node = document.getElementById('elm-host');
+     var app = Elm.Main.embed(node, doc);
     </script>
   </body>
 </html>

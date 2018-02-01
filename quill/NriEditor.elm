@@ -1,6 +1,18 @@
-module NriEditor exposing (State, document, init, onChange, rawText, view)
+module NriEditor
+    exposing
+        ( Document
+        , State
+        , document
+        , documentDecoder
+        , init
+        , initWithContent
+        , onChange
+        , rawText
+        , view
+        )
 
 import Html exposing (..)
+import Html.Attributes exposing (property)
 import Html.Events as Events
 import Json.Decode as Decode
 import Json.Encode as Encode
@@ -12,12 +24,16 @@ type State
 
 type alias Content =
     { text : String
-    , document : Decode.Value
+    , document : Document
     }
 
 
 type Attribute msg
     = Attr (Html.Attribute msg)
+
+
+type alias Document =
+    Decode.Value
 
 
 
@@ -36,6 +52,15 @@ init =
         }
 
 
+initWithContent : Document -> State
+initWithContent content =
+    State
+        { -- TODO: represent initializing state in which there is no text yet
+          text = ""
+        , document = content
+        }
+
+
 onChange : (State -> msg) -> Attribute msg
 onChange tagger =
     Attr <| Events.on "change" (Decode.map tagger stateDecoder)
@@ -46,7 +71,7 @@ rawText (State state) =
     state.text
 
 
-document : State -> Decode.Value
+document : State -> Document
 document (State state) =
     state.document
 
@@ -57,7 +82,12 @@ stateDecoder =
         Decode.map State <|
             Decode.map2 Content
                 (Decode.field "text" Decode.string)
-                (Decode.field "document" Decode.value)
+                (Decode.field "document" documentDecoder)
+
+
+documentDecoder : Decode.Decoder Document
+documentDecoder =
+    Decode.value
 
 
 unattr : Attribute msg -> Html.Attribute msg
@@ -65,6 +95,8 @@ unattr (Attr attr) =
     attr
 
 
-view : List (Attribute msg) -> Html msg
-view attributes =
-    node "nri-editor" (List.map unattr attributes) []
+view : List (Attribute msg) -> State -> Html msg
+view attributes (State state) =
+    node "nri-editor"
+        (property "value" state.document :: List.map unattr attributes)
+        []
