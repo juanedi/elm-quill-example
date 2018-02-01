@@ -60,17 +60,28 @@ class NriEditor extends HTMLElement {
 
     let quillNode = this.getElementsByClassName("editor")[0]
 
-    let quill = new Quill(quillNode, {
+    this._quill = new Quill(quillNode, {
       modules: {
         toolbar: {
           container: ".editor-toolbar",
           handlers: {
             // TODO: add and register toolbar items depending on element properties
-            "foo": (value) => { quill.format('foo', value) }
+            "foo": (value) => { this._quill.format('foo', value) }
           }
         }
       }
     });
+
+    const runDispatch = () => {
+      const event = new Event('change')
+      this.dispatchEvent(event)
+    }
+
+    this._quill.on('text-change', runDispatch);
+  }
+
+  get value() {
+    return this._quill.getText();
   }
 }
 
