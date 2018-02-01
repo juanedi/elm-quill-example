@@ -1,4 +1,4 @@
-var Inline = Quill.import('blots/inline');
+let Inline = Quill.import('blots/inline');
 
 class FooBlot extends Inline { }
 FooBlot.blotName = 'foo';
@@ -12,9 +12,7 @@ class NriEditor extends HTMLElement {
   }
 
   connectedCallback() {
-    // TODO: add and register toolbar items depending on element properties
     // TODO: figure out if we should use HTML imports
-
     this.innerHTML = `
       <style>
         .nri-editor {
@@ -60,18 +58,18 @@ class NriEditor extends HTMLElement {
       </div>
     `;
 
-    var quillNode = this.getElementsByClassName("editor")[0]
+    let quillNode = this.getElementsByClassName("editor")[0]
 
-    var quill = new Quill(quillNode, {
+    let quill = new Quill(quillNode, {
       modules: {
-        toolbar: ".editor-toolbar"
+        toolbar: {
+          container: ".editor-toolbar",
+          handlers: {
+            // TODO: add and register toolbar items depending on element properties
+            "foo": (value) => { quill.format('foo', value) }
+          }
+        }
       }
-    });
-
-    var toolbar = quill.getModule('toolbar');
-
-    toolbar.addHandler('foo', function(value) {
-      quill.format('foo', value);
     });
   }
 }
