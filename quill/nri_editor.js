@@ -48,7 +48,7 @@ class NriEditor extends HTMLElement {
         }
       </style>
 
-      <div class="nri-editor" style="width: 800px; height: 700px">
+      <div class="nri-editor">
         <div class="editor"></div>
           <div class="editor-toolbar">
             <button class="ql-bold">B</button>
@@ -81,7 +81,10 @@ class NriEditor extends HTMLElement {
   }
 
   get value() {
-    return this._quill.getText();
+    return {
+      text: this._quill.getText(),
+      document: this._quill.getContents()
+    };
   }
 }
 

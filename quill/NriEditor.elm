@@ -1,12 +1,19 @@
-module NriEditor exposing (State, init, onChange, rawText, view)
+module NriEditor exposing (State, document, init, onChange, rawText, view)
 
 import Html exposing (..)
 import Html.Events as Events
 import Json.Decode as Decode
+import Json.Encode as Encode
 
 
 type State
-    = State { text : String }
+    = State Content
+
+
+type alias Content =
+    { text : String
+    , document : Decode.Value
+    }
 
 
 type Attribute msg
@@ -16,18 +23,17 @@ type Attribute msg
 
 {-
    TODO:
-
-   - [ ] communicate editor contents to Elm
-     - [X] plainText
-     - [ ] formatted document
-   - [ ] preload editor contents based on initial Elm mode
-   - [ ] maybe add attributes to component to enable/disable formatting features?
+     - [ ] preload editor contents based on elm model
+     - [ ] maybe add attributes to component to enable/disable formatting features?
 -}
 
 
 init : State
 init =
-    State { text = "" }
+    State
+        { text = ""
+        , document = Encode.string ""
+        }
 
 
 onChange : (State -> msg) -> Attribute msg
@@ -40,11 +46,18 @@ rawText (State state) =
     state.text
 
 
+document : State -> Decode.Value
+document (State state) =
+    state.document
+
+
 stateDecoder : Decode.Decoder State
 stateDecoder =
-    Decode.map
-        (\value -> State { text = value })
-        Events.targetValue
+    Decode.at [ "target", "value" ] <|
+        Decode.map State <|
+            Decode.map2 Content
+                (Decode.field "text" Decode.string)
+                (Decode.field "document" Decode.value)
 
 
 unattr : Attribute msg -> Html.Attribute msg
